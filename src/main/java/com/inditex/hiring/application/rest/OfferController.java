@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.inditex.hiring.application.dto.OfferDto;
 
 
-import javax.validation.Valid;
+//import javax.validation.Valid;
 
 
 @RestController
@@ -21,7 +21,7 @@ public class OfferController {
 	//Crear
 	@RequestMapping(value="/offer", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.OK)
-	public boolean createOffer(@RequestBody @Valid OfferDto offerdto){
+	public boolean createOffer(@RequestBody OfferDto offerdto){
 		return true;
 	}
 
