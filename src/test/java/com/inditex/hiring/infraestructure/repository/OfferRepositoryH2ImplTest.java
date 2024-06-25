@@ -1,5 +1,6 @@
 package com.inditex.hiring.infraestructure.repository;
 
+import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.port.OfferRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -44,7 +45,37 @@ class OfferRepositoryH2ImplTest {
                 "USD"
         );
 
-        assertThrows(RuntimeException.class, () -> offerRepository.createOffer(offer));
+        assertThrows(DuplicateOfferIdException.class, () -> offerRepository.createOffer(offer));
 
+    }
+
+    @Test
+    void testCreateOffer_success() {
+        Offer offer = new Offer(
+                2L,
+                1,
+                LocalDateTime.of(2023, 1, 1, 0, 0),
+                LocalDateTime.of(2023, 12, 31, 23, 59),
+                1L,
+                "P1235",
+                1,
+                new BigDecimal("150.0"),
+                "USD"
+        );
+
+        offerRepository.createOffer(offer);
+
+        List<Offer> offers = jdbcTemplate.query("SELECT * FROM Offer", (rs, rowNum) -> new Offer(
+                rs.getLong("OFFER_ID"),
+                rs.getInt("BRAND_ID"),
+                rs.getTimestamp("START_DATE").toLocalDateTime(),
+                rs.getTimestamp("END_DATE").toLocalDateTime(),
+                rs.getLong("PRICE_LIST"),
+                rs.getString("PARTNUMBER"),
+                rs.getInt("PRIORITY"),
+                rs.getBigDecimal("PRICE"),
+                rs.getString("CURR")
+        ));
+        assertEquals(2, offers.size());
     }
 }
