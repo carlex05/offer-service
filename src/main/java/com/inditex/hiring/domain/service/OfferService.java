@@ -9,8 +9,9 @@ public class OfferService {
 
     private final OfferRepository repository;
 
-    void createOffer(Offer offer){
+    public void createOffer(Offer offer){
         if(offer == null)
             throw new IllegalArgumentException("An offer is required");
+        repository.createOffer(offer);
     }
 }
