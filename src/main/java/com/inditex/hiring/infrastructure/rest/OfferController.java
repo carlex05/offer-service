@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.service.OfferService;
-import com.inditex.hiring.infrastructure.rest.exception.NoSuchResourceFoundException;
+import com.inditex.hiring.domain.exception.NoSuchResourceFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

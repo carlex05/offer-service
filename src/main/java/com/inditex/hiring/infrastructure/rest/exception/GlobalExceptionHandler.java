@@ -1,6 +1,7 @@
 package com.inditex.hiring.infrastructure.rest.exception;
 
 import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
+import com.inditex.hiring.domain.exception.NoSuchResourceFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;

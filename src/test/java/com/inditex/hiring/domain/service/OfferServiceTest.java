@@ -1,5 +1,6 @@
 package com.inditex.hiring.domain.service;
 
+import com.inditex.hiring.domain.exception.NoSuchResourceFoundException;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.port.OfferRepository;
 import org.junit.jupiter.api.Test;
@@ -84,6 +85,31 @@ class OfferServiceTest {
         assertEquals(offer1, offers.get(0));
         assertEquals(offer2, offers.get(1));
         verify(repository, times(1)).findAll();
+    }
+
+    @Test
+    void updateOffer_withNullValue() {
+        assertThrows(IllegalArgumentException.class, () -> new OfferService(null).updateOffer(null));
+    }
+    @Test
+    void updateOffer_withNonExistentOffer() {
+        var offer = createOffer();
+        when(repository.findById(offer.offerId())).thenReturn(Optional.empty());
+
+        OfferService offerService = new OfferService(repository);
+        assertThrows(NoSuchResourceFoundException.class, () -> offerService.updateOffer(offer));
+    }
+
+    @Test
+    void updateOffer_validOffer() {
+        var offer = createOffer();
+        when(repository.findById(offer.offerId())).thenReturn(Optional.of(offer));
+        doNothing().when(repository).updateOffer(any(Offer.class));
+
+        OfferService offerService = new OfferService(repository);
+        offerService.updateOffer(offer);
+
+        verify(repository, times(1)).updateOffer(offer);
     }
 
 }

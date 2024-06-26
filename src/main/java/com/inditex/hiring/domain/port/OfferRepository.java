@@ -12,4 +12,6 @@ public interface OfferRepository {
     Optional<Offer> findById(long id);
 
     List<Offer> findAll();
+
+    void updateOffer(Offer offer);
 }

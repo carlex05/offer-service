@@ -57,4 +57,9 @@ public class OfferRepositoryH2Impl implements OfferRepository {
                 OfferDbMapper::toOffer
         );
     }
+
+    @Override
+    public void updateOffer(Offer offer) {
+
+    }
 }

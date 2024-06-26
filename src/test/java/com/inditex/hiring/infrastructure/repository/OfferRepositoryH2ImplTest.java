@@ -3,7 +3,6 @@ package com.inditex.hiring.infrastructure.repository;
 import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.port.OfferRepository;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
