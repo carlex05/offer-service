@@ -1,28 +1,29 @@
-package com.inditex.hiring.application.rest;
+package com.inditex.hiring.infrastructure.rest;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.inditex.hiring.application.dto.OfferDto;
+import com.inditex.hiring.infrastructure.rest.dto.OfferDto;
 
 
 //import javax.validation.Valid;
 
 
 @RestController
+@RequestMapping(path = "/offers")
 public class OfferController {
 
 	
 	
-	//Crear
-	@RequestMapping(value="/offer", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.OK)
-	public boolean createOffer(@RequestBody OfferDto offerdto){
-		return true;
+
+	@PostMapping
+	public ResponseEntity<OfferDto> createOffer(@RequestBody @Valid OfferDto offerdto){
+		return null;
 	}
 
 	//Borrar por id

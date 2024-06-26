@@ -1,4 +1,4 @@
-package com.inditex.hiring.infraestructure.repository;
+package com.inditex.hiring.infrastructure.repository;
 
 import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
 import com.inditex.hiring.domain.model.Offer;
