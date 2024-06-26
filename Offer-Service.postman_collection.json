@@ -31,6 +31,24 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
+					"raw": "{\r\n    \"offerId\": 1,\r\n    \"brandId\": 1,\r\n    \"startDate\": \"2023-01-01T00:00:00Z\",\r\n    \"endDate\": \"2023-12-31T23:59:59Z\",\r\n    \"priceListId\": 1,\r\n    \"productPartnumber\": \"000100233\",\r\n    \"priority\": 1,\r\n    \"price\": 100.0,\r\n    \"currencyIso\": \"USD\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/offers"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateOfferWrongproductPartnumber",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
 					"raw": "{\r\n    \"offerId\": 1,\r\n    \"brandId\": 1,\r\n    \"startDate\": \"2023-01-01T00:00:00Z\",\r\n    \"endDate\": \"2023-12-31T23:59:59Z\",\r\n    \"priceListId\": 1,\r\n    \"productPartnumber\": \"P1234\",\r\n    \"priority\": 1,\r\n    \"price\": 100.0,\r\n    \"currencyIso\": \"USD\"\r\n}",
 					"options": {
 						"raw": {
@@ -67,7 +85,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"offerId\": 1,\r\n    \"brandId\": 3,\r\n    \"startDate\": \"2024-01-01T00:00:00Z\",\r\n    \"endDate\": \"2024-12-31T23:59:59Z\",\r\n    \"priceListId\": 3,\r\n    \"productPartnumber\": \"P1236\",\r\n    \"priority\": 2,\r\n    \"price\": 200.0,\r\n    \"currencyIso\": \"USD\"\r\n}\r\n",
+					"raw": "{\r\n    \"offerId\": 1,\r\n    \"brandId\": 3,\r\n    \"startDate\": \"2024-01-01T00:00:00Z\",\r\n    \"endDate\": \"2024-12-31T23:59:59Z\",\r\n    \"priceListId\": 3,\r\n    \"productPartnumber\": \"000100233\",\r\n    \"priority\": 2,\r\n    \"price\": 200.0,\r\n    \"currencyIso\": \"USD\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"

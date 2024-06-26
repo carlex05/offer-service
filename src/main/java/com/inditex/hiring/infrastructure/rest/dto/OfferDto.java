@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record OfferDto(
 		@NotNull(message = "Mandatory value offerId") Long offerId,
@@ -13,7 +14,7 @@ public record OfferDto(
 		@NotNull(message = "No empty value startDate") LocalDateTime startDate,
 		@NotNull(message = "No empty value endDate") LocalDateTime endDate,
 		Long priceListId,
-		String productPartnumber,
+		@Size(min = 9, max = 9, message = "The value must be 9 characters") String productPartnumber,
 		Integer priority,
 		BigDecimal price,
 		String currencyIso

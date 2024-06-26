@@ -14,7 +14,9 @@ public interface OfferDbMapper {
                 rs.getTimestamp("START_DATE").toLocalDateTime(),
                 rs.getTimestamp("END_DATE").toLocalDateTime(),
                 rs.getLong("PRICE_LIST"),
-                rs.getString("PARTNUMBER"),
+                rs.getString("SIZE"),
+                rs.getString("MODEL"),
+                rs.getString("QUALITY"),
                 rs.getInt("PRIORITY"),
                 rs.getBigDecimal("PRICE"),
                 rs.getString("CURR"));

@@ -43,7 +43,9 @@ class OfferServiceTest {
                 initialDate,
                 finalDate,
                 10,
-                "Number",
+                "00",
+                "0100",
+                "233",
                 1,
                 BigDecimal.TEN,
                 "ES");

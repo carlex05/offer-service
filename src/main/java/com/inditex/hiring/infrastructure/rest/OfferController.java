@@ -48,7 +48,7 @@ public class OfferController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<OfferDto> updateOffer(@PathVariable Long id, @RequestBody OfferDto offerDto) {
+	public ResponseEntity<OfferDto> updateOffer(@PathVariable Long id, @Valid @RequestBody OfferDto offerDto) {
 		if (!id.equals(offerDto.offerId())) {
 			return ResponseEntity.badRequest().build();
 		}

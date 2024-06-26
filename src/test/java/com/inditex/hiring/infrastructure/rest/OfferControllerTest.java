@@ -39,13 +39,13 @@ class OfferControllerTest {
     void prepareDb() {
         jdbcTemplate.update("DELETE FROM Offer");
         jdbcTemplate.update(
-                "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, PARTNUMBER, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                1L, 1, LocalDateTime.of(2023, 1, 1, 0, 0, 0), LocalDateTime.of(2023, 12, 31, 23, 59, 0), 1L, "P1234", 1, new BigDecimal("100.0"), "USD"
+                "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, SIZE, MODEL, QUALITY, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                1L, 1, LocalDateTime.of(2023, 1, 1, 0, 0, 0), LocalDateTime.of(2023, 12, 31, 23, 59, 0), 1L, "00", "0100", "233", 1, new BigDecimal("100.0"), "USD"
         );
     }
 
     @Test
-    void testCreateOffer_invalidBody() throws Exception  {
+    void testCreateOffer_invalidBody() throws Exception {
         var invalidOffer = new OfferDto(
                 null,
                 null,
@@ -83,7 +83,7 @@ class OfferControllerTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59),
                 1L,
-                "P1234",
+                "000100233",
                 1,
                 new BigDecimal("100.0"),
                 "USD"
@@ -103,7 +103,7 @@ class OfferControllerTest {
                 LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                 LocalDateTime.of(2024, 12, 31, 23, 59, 0),
                 2L,
-                "P1235",
+                "000200234",
                 1,
                 new BigDecimal("150.0"),
                 "EUR"
@@ -126,35 +126,22 @@ class OfferControllerTest {
 
     @Test
     void testGetOfferById_withValidId() throws Exception {
-        Offer offer = new Offer(
-                1L,
-                1,
-                LocalDateTime.of(2023, 1, 1, 0, 0),
-                LocalDateTime.of(2023, 12, 31, 23, 59),
-                1L,
-                "P1234",
-                1,
-                new BigDecimal("100.0"),
-                "USD"
-        );
-
         mockMvc.perform(get("/offers/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.offerId").value(offer.offerId()))
-                .andExpect(jsonPath("$.brandId").value(offer.brandId()))
-                .andExpect(jsonPath("$.startDate").value(offer.startDate().format(formatter)))
-                .andExpect(jsonPath("$.endDate").value(offer.endDate().format(formatter)))
-                .andExpect(jsonPath("$.priceListId").value(offer.priceListId()))
-                .andExpect(jsonPath("$.productPartnumber").value(offer.productPartnumber()))
-                .andExpect(jsonPath("$.priority").value(offer.priority()))
-                .andExpect(jsonPath("$.price").value(offer.price().doubleValue()))
-                .andExpect(jsonPath("$.currencyIso").value(offer.currencyIso()));
+                .andExpect(jsonPath("$.offerId").value(1L))
+                .andExpect(jsonPath("$.brandId").value(1))
+                .andExpect(jsonPath("$.startDate").value(LocalDateTime.of(2023, 1, 1, 0, 0).format(formatter)))
+                .andExpect(jsonPath("$.endDate").value(LocalDateTime.of(2023, 12, 31, 23, 59).format(formatter)))
+                .andExpect(jsonPath("$.priceListId").value(1L))
+                .andExpect(jsonPath("$.productPartnumber").value("000100233"))
+                .andExpect(jsonPath("$.priority").value(1))
+                .andExpect(jsonPath("$.price").value(100.0))
+                .andExpect(jsonPath("$.currencyIso").value("USD"));
     }
 
     @Test
     void testGetOfferById_withInvalidId() throws Exception {
-
         mockMvc.perform(get("/offers/999")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -168,7 +155,7 @@ class OfferControllerTest {
                 LocalDateTime.of(2024, 1, 1, 0, 0),
                 LocalDateTime.of(2024, 12, 31, 23, 59),
                 2L,
-                "P1235",
+                "000200234",
                 1,
                 new BigDecimal("150.0"),
                 "EUR"
@@ -188,7 +175,7 @@ class OfferControllerTest {
                 .andExpect(jsonPath("$[0].startDate").value(LocalDateTime.of(2023, 1, 1, 0, 0).format(formatter)))
                 .andExpect(jsonPath("$[0].endDate").value(LocalDateTime.of(2023, 12, 31, 23, 59).format(formatter)))
                 .andExpect(jsonPath("$[0].priceListId").value(1L))
-                .andExpect(jsonPath("$[0].productPartnumber").value("P1234"))
+                .andExpect(jsonPath("$[0].productPartnumber").value("000100233"))
                 .andExpect(jsonPath("$[0].priority").value(1))
                 .andExpect(jsonPath("$[0].price").value(100.0))
                 .andExpect(jsonPath("$[0].currencyIso").value("USD"))
@@ -197,7 +184,7 @@ class OfferControllerTest {
                 .andExpect(jsonPath("$[1].startDate").value(LocalDateTime.of(2024, 1, 1, 0, 0).format(formatter)))
                 .andExpect(jsonPath("$[1].endDate").value(LocalDateTime.of(2024, 12, 31, 23, 59).format(formatter)))
                 .andExpect(jsonPath("$[1].priceListId").value(2L))
-                .andExpect(jsonPath("$[1].productPartnumber").value("P1235"))
+                .andExpect(jsonPath("$[1].productPartnumber").value("000200234"))
                 .andExpect(jsonPath("$[1].priority").value(1))
                 .andExpect(jsonPath("$[1].price").value(150.0))
                 .andExpect(jsonPath("$[1].currencyIso").value("EUR"));
@@ -211,7 +198,7 @@ class OfferControllerTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59, 0),
                 2L,
-                "P1235",
+                "000200235",
                 2,
                 new BigDecimal("200.0"),
                 "EUR"
@@ -240,7 +227,7 @@ class OfferControllerTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59, 0),
                 2L,
-                "P1235",
+                "000200235",
                 2,
                 new BigDecimal("200.0"),
                 "EUR"
@@ -260,7 +247,7 @@ class OfferControllerTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59, 0),
                 2L,
-                "P1235",
+                "000200235",
                 2,
                 new BigDecimal("200.0"),
                 "EUR"
@@ -284,7 +271,7 @@ class OfferControllerTest {
                 rs.getTimestamp("START_DATE").toLocalDateTime(),
                 rs.getTimestamp("END_DATE").toLocalDateTime(),
                 rs.getLong("PRICE_LIST"),
-                rs.getString("PARTNUMBER"),
+                rs.getString("SIZE") + rs.getString("MODEL") + rs.getString("QUALITY"),
                 rs.getInt("PRIORITY"),
                 rs.getBigDecimal("PRICE"),
                 rs.getString("CURR")
@@ -297,6 +284,48 @@ class OfferControllerTest {
         mockMvc.perform(delete("/offers/999")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testCreateOffer_invalidPartnumberTooShort() throws Exception {
+        OfferDto invalidOffer = new OfferDto(
+                2L,
+                2,
+                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2024, 12, 31, 23, 59, 0),
+                2L,
+                "00023", // Too short
+                1,
+                new BigDecimal("150.0"),
+                "EUR"
+        );
+
+        mockMvc.perform(post("/offers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidOffer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.productPartnumber").value("The value must be 9 characters"));
+    }
+
+    @Test
+    void testCreateOffer_invalidPartnumberTooLong() throws Exception {
+        OfferDto invalidOffer = new OfferDto(
+                2L,
+                2,
+                LocalDateTime.of(2024, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2024, 12, 31, 23, 59, 0),
+                2L,
+                "0002002345678", // Too long
+                1,
+                new BigDecimal("150.0"),
+                "EUR"
+        );
+
+        mockMvc.perform(post("/offers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidOffer)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.productPartnumber").value("The value must be 9 characters"));
     }
 
 }

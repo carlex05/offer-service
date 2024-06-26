@@ -25,13 +25,15 @@ public class OfferRepositoryH2Impl implements OfferRepository {
     public void createOffer(Offer offer) {
         try {
             jdbcTemplate.update(
-                    "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, PARTNUMBER, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, SIZE, MODEL, QUALITY, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                     offer.offerId(),
                     offer.brandId(),
                     offer.startDate(),
                     offer.endDate(),
                     offer.priceListId(),
-                    offer.productPartnumber(),
+                    offer.size(),
+                    offer.model(),
+                    offer.quality(),
                     offer.priority(),
                     offer.price(),
                     offer.currencyIso()
@@ -62,12 +64,14 @@ public class OfferRepositoryH2Impl implements OfferRepository {
     @Override
     public void updateOffer(Offer offer) {
         jdbcTemplate.update(
-                "UPDATE Offer SET BRAND_ID = ?, START_DATE = ?, END_DATE = ?, PRICE_LIST = ?, PARTNUMBER = ?, PRIORITY = ?, PRICE = ?, CURR = ? WHERE OFFER_ID = ?",
+                "UPDATE Offer SET BRAND_ID = ?, START_DATE = ?, END_DATE = ?, PRICE_LIST = ?, SIZE = ?, MODEL = ?, QUALITY = ?, PRIORITY = ?, PRICE = ?, CURR = ? WHERE OFFER_ID = ?",
                 offer.brandId(),
                 offer.startDate(),
                 offer.endDate(),
                 offer.priceListId(),
-                offer.productPartnumber(),
+                offer.size(),
+                offer.model(),
+                offer.quality(),
                 offer.priority(),
                 offer.price(),
                 offer.currencyIso(),

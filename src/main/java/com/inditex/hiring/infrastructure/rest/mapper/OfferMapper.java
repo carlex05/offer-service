@@ -13,7 +13,7 @@ public interface OfferMapper {
                 offer.startDate(),
                 offer.endDate(),
                 offer.priceListId(),
-                offer.productPartnumber(),
+                offer.size() + offer.model() + offer.quality(), // Combine the parts back to productPartnumber
                 offer.priority(),
                 offer.price(),
                 offer.currencyIso()
@@ -21,13 +21,20 @@ public interface OfferMapper {
     }
 
     static Offer toDomain(OfferDto offerDto) {
+        String partnumber = offerDto.productPartnumber();
+        String size = partnumber.substring(0, 2);
+        String model = partnumber.substring(2, 6);
+        String quality = partnumber.substring(6, 9);
+
         return new Offer(
                 offerDto.offerId(),
                 offerDto.brandId(),
                 offerDto.startDate(),
                 offerDto.endDate(),
                 offerDto.priceListId(),
-                offerDto.productPartnumber(),
+                size,
+                model,
+                quality,
                 offerDto.priority(),
                 offerDto.price(),
                 offerDto.currencyIso()

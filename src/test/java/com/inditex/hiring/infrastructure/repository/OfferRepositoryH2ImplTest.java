@@ -34,8 +34,8 @@ class OfferRepositoryH2ImplTest {
     void prepareDb() {
         jdbcTemplate.update("DELETE FROM Offer");
         jdbcTemplate.update(
-                "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, PARTNUMBER, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                1L, 1, LocalDateTime.of(2023, 1, 1, 0, 0), LocalDateTime.of(2023, 12, 31, 23, 59), 1L, "P1234", 1, new BigDecimal("100.0"), "USD"
+                "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, SIZE, MODEL, QUALITY, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                1L, 1, LocalDateTime.of(2023, 1, 1, 0, 0), LocalDateTime.of(2023, 12, 31, 23, 59), 1L, "00", "0100", "233", 1, new BigDecimal("100.0"), "USD"
         );
     }
 
@@ -47,14 +47,15 @@ class OfferRepositoryH2ImplTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59),
                 1L,
-                "P1235",
+                "00",
+                "0100",
+                "233",
                 1,
                 new BigDecimal("150.0"),
                 "USD"
         );
 
         assertThrows(DuplicateOfferIdException.class, () -> offerRepository.createOffer(offer));
-
     }
 
     @Test
@@ -65,7 +66,9 @@ class OfferRepositoryH2ImplTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59),
                 1L,
-                "P1235",
+                "00",
+                "0100",
+                "234",
                 1,
                 new BigDecimal("150.0"),
                 "USD"
@@ -79,7 +82,9 @@ class OfferRepositoryH2ImplTest {
                 rs.getTimestamp("START_DATE").toLocalDateTime(),
                 rs.getTimestamp("END_DATE").toLocalDateTime(),
                 rs.getLong("PRICE_LIST"),
-                rs.getString("PARTNUMBER"),
+                rs.getString("SIZE"),
+                rs.getString("MODEL"),
+                rs.getString("QUALITY"),
                 rs.getInt("PRIORITY"),
                 rs.getBigDecimal("PRICE"),
                 rs.getString("CURR")
@@ -110,7 +115,9 @@ class OfferRepositoryH2ImplTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59),
                 1L,
-                "P1235",
+                "00",
+                "0100",
+                "234",
                 1,
                 new BigDecimal("150.0"),
                 "USD"
@@ -129,7 +136,9 @@ class OfferRepositoryH2ImplTest {
                 LocalDateTime.of(2023, 1, 1, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59),
                 2L,  // updated priceListId
-                "P1235",  // updated partnumber
+                "00",
+                "0100",
+                "235",  // updated quality
                 2,  // updated priority
                 new BigDecimal("200.0"),  // updated price
                 "EUR"  // updated currency
@@ -143,7 +152,9 @@ class OfferRepositoryH2ImplTest {
                 rs.getTimestamp("START_DATE").toLocalDateTime(),
                 rs.getTimestamp("END_DATE").toLocalDateTime(),
                 rs.getLong("PRICE_LIST"),
-                rs.getString("PARTNUMBER"),
+                rs.getString("SIZE"),
+                rs.getString("MODEL"),
+                rs.getString("QUALITY"),
                 rs.getInt("PRIORITY"),
                 rs.getBigDecimal("PRICE"),
                 rs.getString("CURR")
@@ -152,7 +163,9 @@ class OfferRepositoryH2ImplTest {
         Offer updatedOffer = offers.get(0);
         assertEquals(2, updatedOffer.brandId());
         assertEquals(2L, updatedOffer.priceListId());
-        assertEquals("P1235", updatedOffer.productPartnumber());
+        assertEquals("00", updatedOffer.size());
+        assertEquals("0100", updatedOffer.model());
+        assertEquals("235", updatedOffer.quality());
         assertEquals(2, updatedOffer.priority());
         assertTrue(new BigDecimal("200.0").compareTo(updatedOffer.price()) == 0);
         assertEquals("EUR", updatedOffer.currencyIso());
@@ -168,7 +181,9 @@ class OfferRepositoryH2ImplTest {
                 rs.getTimestamp("START_DATE").toLocalDateTime(),
                 rs.getTimestamp("END_DATE").toLocalDateTime(),
                 rs.getLong("PRICE_LIST"),
-                rs.getString("PARTNUMBER"),
+                rs.getString("SIZE"),
+                rs.getString("MODEL"),
+                rs.getString("QUALITY"),
                 rs.getInt("PRIORITY"),
                 rs.getBigDecimal("PRICE"),
                 rs.getString("CURR")
