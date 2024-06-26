@@ -45,23 +45,16 @@ public class OfferRepositoryH2Impl implements OfferRepository {
         List<Offer> offers = jdbcTemplate.query(
                 "SELECT * FROM Offer WHERE OFFER_ID = ?",
                 new Object[]{id},
-                (rs, rowNum) -> new Offer(
-                        rs.getLong("OFFER_ID"),
-                        rs.getInt("BRAND_ID"),
-                        rs.getTimestamp("START_DATE").toLocalDateTime(),
-                        rs.getTimestamp("END_DATE").toLocalDateTime(),
-                        rs.getLong("PRICE_LIST"),
-                        rs.getString("PARTNUMBER"),
-                        rs.getInt("PRIORITY"),
-                        rs.getBigDecimal("PRICE"),
-                        rs.getString("CURR")
-                )
+                OfferDbMapper::toOffer
         );
         return offers.stream().findFirst();
     }
 
     @Override
     public List<Offer> findAll() {
-        return List.of();
+        return jdbcTemplate.query(
+                "SELECT * FROM Offer",
+                OfferDbMapper::toOffer
+        );
     }
 }

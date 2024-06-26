@@ -3,6 +3,7 @@ package com.inditex.hiring.infrastructure.rest;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.service.OfferService;
@@ -46,20 +47,11 @@ public class OfferController {
 		return ResponseEntity.ok(offerDto);
 	}
 
-	//Eliminar todas las ofertas
-	@RequestMapping(value = "/offer", method = RequestMethod.DELETE)
-	@ResponseStatus(HttpStatus.OK)
-	public void deleteAllOffers() {
-	
-
-	}
-	
-	//Endopint para optener todas las ofertas
-	@RequestMapping(value = "/offer", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public List<OfferDto> getAllOffers() {
-		return null;
-
+	@GetMapping
+	public ResponseEntity<List<OfferDto>> getAllOffers() {
+		List<Offer> offers = offerService.getAllOffers();
+		List<OfferDto> offerDtos = offers.stream().map(OfferMapper::toDto).collect(Collectors.toList());
+		return ResponseEntity.ok(offerDtos);
 	}
 
 	

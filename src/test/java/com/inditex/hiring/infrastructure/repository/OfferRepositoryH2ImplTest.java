@@ -4,11 +4,13 @@ import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.port.OfferRepository;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 class OfferRepositoryH2ImplTest {
 
     @Autowired
@@ -27,9 +30,13 @@ class OfferRepositoryH2ImplTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @BeforeAll
-    void prepareDb(){
-
+    @BeforeEach
+    void prepareDb() {
+        jdbcTemplate.update("DELETE FROM Offer");
+        jdbcTemplate.update(
+                "INSERT INTO Offer (OFFER_ID, BRAND_ID, START_DATE, END_DATE, PRICE_LIST, PARTNUMBER, PRIORITY, PRICE, CURR) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                1L, 1, LocalDateTime.of(2023, 1, 1, 0, 0), LocalDateTime.of(2023, 12, 31, 23, 59), 1L, "P1234", 1, new BigDecimal("100.0"), "USD"
+        );
     }
 
     @Test
@@ -93,5 +100,24 @@ class OfferRepositoryH2ImplTest {
         Optional<Offer> offer = offerRepository.findById(999L);
 
         assertFalse(offer.isPresent());
+    }
+
+    @Test
+    void testFindAll() {
+        Offer offer = new Offer(
+                2L,
+                1,
+                LocalDateTime.of(2023, 1, 1, 0, 0),
+                LocalDateTime.of(2023, 12, 31, 23, 59),
+                1L,
+                "P1235",
+                1,
+                new BigDecimal("150.0"),
+                "USD"
+        );
+        offerRepository.createOffer(offer);
+
+        List<Offer> offers = offerRepository.findAll();
+        assertEquals(2, offers.size());
     }
 }
