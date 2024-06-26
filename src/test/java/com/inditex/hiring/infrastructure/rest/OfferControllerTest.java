@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.http.MediaType;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,10 +26,10 @@ class OfferControllerTest {
     @Test
     void createOffer_invalidBody() throws Exception  {
         var invalidOffer = new OfferDto(
-                null,  // offerId is null
-                null,  // brandId is null
-                null,  // startDate is null
-                null,  // endDate is null
+                null,
+                null,
+                null,
+                null,
                 1L,
                 "000100233",
                 0,
@@ -39,7 +40,11 @@ class OfferControllerTest {
         mockMvc.perform(post("/offers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidOffer)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.offerId").value("Mandatory value offerId"))
+                .andExpect(jsonPath("$.brandId").value("Mandatory value brandId"))
+                .andExpect(jsonPath("$.startDate").value("No empty value startDate"))
+                .andExpect(jsonPath("$.endDate").value("No empty value endDate"));
     }
 
 }
