@@ -4,9 +4,9 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.service.OfferService;
+import com.inditex.hiring.infrastructure.rest.exception.NoSuchResourceFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import com.inditex.hiring.infrastructure.rest.dto.OfferDto;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "/offers")
+@RequestMapping("/offers")
 public class OfferController {
 
 	private final OfferService offerService;
@@ -31,19 +31,19 @@ public class OfferController {
 				.body(offerDto);
 	}
 
-	//Borrar por id
 	@RequestMapping(value="/offer/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.OK)
 	public Optional<Long> deleteOfferById(@PathVariable("id") Long id){
 		return null;
 	}
 
-	//Obtener por id
-	@RequestMapping(value="/offer/{id}", method = RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public OfferDto getOfferById(@PathVariable Long id){
-		return null;
-		
+	@GetMapping("/{id}")
+	public ResponseEntity<OfferDto> getOfferById(@PathVariable Long id){
+		var offer = offerService.getOfferById(id);
+		if(offer.isEmpty())
+			throw new NoSuchResourceFoundException("Offer with id " + id + " not found");
+		OfferDto offerDto = OfferMapper.toDto(offer.get());
+		return ResponseEntity.ok(offerDto);
 	}
 
 	//Eliminar todas las ofertas

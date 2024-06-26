@@ -32,4 +32,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleDuplicateOfferIdException(DuplicateOfferIdException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
+
+    @ExceptionHandler(NoSuchResourceFoundException.class)
+    public ResponseEntity<String> handleNoSuchResourceFoundException(NoSuchResourceFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

@@ -53,10 +53,10 @@ class OfferServiceTest {
         when(repository.findById(1000L)).thenReturn(Optional.of(offer));
 
         OfferService offerService = new OfferService(repository);
-        Offer foundOffer = offerService.getOfferById(1000L);
+        var foundOffer = offerService.getOfferById(1000L);
 
-        assertNotNull(foundOffer);
-        assertEquals(1000L, foundOffer.offerId());
+        assertTrue(foundOffer.isPresent());
+        assertEquals(1000L, foundOffer.get().offerId());
         verify(repository, times(1)).findById(1000L);
     }
 
@@ -65,8 +65,8 @@ class OfferServiceTest {
         when(repository.findById(1000L)).thenReturn(Optional.empty());
 
         OfferService offerService = new OfferService(repository);
-
-        assertThrows(IllegalArgumentException.class, () -> offerService.getOfferById(1000L));
+        var notFoundOffer = offerService.getOfferById(1000L);
+        assertTrue(notFoundOffer.isEmpty());
         verify(repository, times(1)).findById(1000L);
     }
 

@@ -5,6 +5,8 @@ import com.inditex.hiring.domain.port.OfferRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class OfferService {
@@ -17,8 +19,7 @@ public class OfferService {
         repository.createOffer(offer);
     }
 
-    public Offer getOfferById(long id){
-        return repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Offer not found with id: " + id));
+    public Optional<Offer> getOfferById(long id){
+        return repository.findById(id);
     }
 }
