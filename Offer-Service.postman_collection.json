@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "2ba5aaf8-99d2-4d26-a22d-4544c103060b",
+		"name": "Offer-Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "10342249"
+	},
+	"item": [
+		{
+			"name": "GetAllOffers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/offers"
+			},
+			"response": []
+		},
+		{
+			"name": "GetOfferById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/offers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateOffer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"offerId\": 1,\r\n    \"brandId\": 1,\r\n    \"startDate\": \"2023-01-01T00:00:00Z\",\r\n    \"endDate\": \"2023-12-31T23:59:59Z\",\r\n    \"priceListId\": 1,\r\n    \"productPartnumber\": \"P1234\",\r\n    \"priority\": 1,\r\n    \"price\": 100.0,\r\n    \"currencyIso\": \"USD\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/offers"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateInvalidOffer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"offerId\": null,\r\n    \"brandId\": null,\r\n    \"startDate\": \"\",\r\n    \"endDate\": \"\",\r\n    \"priceListId\": 1,\r\n    \"productPartnumber\": \"000100233\",\r\n    \"priority\": 0,\r\n    \"price\": 35.50,\r\n    \"currencyIso\": \"EUR\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/offers"
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateOffer",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"offerId\": 1,\r\n    \"brandId\": 3,\r\n    \"startDate\": \"2024-01-01T00:00:00Z\",\r\n    \"endDate\": \"2024-12-31T23:59:59Z\",\r\n    \"priceListId\": 3,\r\n    \"productPartnumber\": \"P1236\",\r\n    \"priority\": 2,\r\n    \"price\": 200.0,\r\n    \"currencyIso\": \"USD\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/offers/1"
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteOffer",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/offers/1"
+			},
+			"response": []
+		}
+	]
+}
