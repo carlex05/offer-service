@@ -112,4 +112,24 @@ class OfferServiceTest {
         verify(repository, times(1)).updateOffer(offer);
     }
 
+    @Test
+    void deleteOfferById_withValidId() {
+        long offerId = 1000L;
+        when(repository.findById(offerId)).thenReturn(Optional.of(createOffer()));
+
+        OfferService offerService = new OfferService(repository);
+        offerService.deleteOfferById(offerId);
+
+        verify(repository, times(1)).deleteOfferById(offerId);
+    }
+
+    @Test
+    void deleteOfferById_withInvalidId() {
+        long offerId = 1000L;
+        when(repository.findById(offerId)).thenReturn(Optional.empty());
+
+        OfferService offerService = new OfferService(repository);
+        assertThrows(NoSuchResourceFoundException.class, () -> offerService.deleteOfferById(offerId));
+    }
+
 }

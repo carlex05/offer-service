@@ -1,6 +1,7 @@
 package com.inditex.hiring.infrastructure.repository;
 
 import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
+import com.inditex.hiring.domain.exception.NoSuchResourceFoundException;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.port.OfferRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -72,5 +73,14 @@ public class OfferRepositoryH2Impl implements OfferRepository {
                 offer.currencyIso(),
                 offer.offerId()
         );
+    }
+
+    @Override
+    public void deleteOfferById(long id) {
+        int rowsAffected = jdbcTemplate.update("DELETE FROM Offer WHERE OFFER_ID = ?", id);
+
+        if (rowsAffected == 0) {
+            throw new NoSuchResourceFoundException("Offer with ID " + id + " does not exist.");
+        }
     }
 }

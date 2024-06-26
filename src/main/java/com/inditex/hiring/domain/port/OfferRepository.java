@@ -14,4 +14,6 @@ public interface OfferRepository {
     List<Offer> findAll();
 
     void updateOffer(Offer offer);
+
+    void deleteOfferById(long id);
 }

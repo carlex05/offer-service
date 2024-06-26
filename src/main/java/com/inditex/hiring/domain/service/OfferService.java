@@ -36,4 +36,11 @@ public class OfferService {
             throw new NoSuchResourceFoundException("Offer with ID " + offer.offerId() + " does not exist.");
         repository.updateOffer(offer);
     }
+
+    public void deleteOfferById(long id) {
+        if (repository.findById(id).isEmpty()) {
+            throw new NoSuchResourceFoundException("Offer with ID " + id + " does not exist.");
+        }
+        repository.deleteOfferById(id);
+    }
 }

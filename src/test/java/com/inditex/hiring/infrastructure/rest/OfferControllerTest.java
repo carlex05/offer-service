@@ -2,7 +2,6 @@ package com.inditex.hiring.infrastructure.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inditex.hiring.domain.model.Offer;
-import com.inditex.hiring.domain.port.OfferRepository;
 import com.inditex.hiring.infrastructure.rest.dto.OfferDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -78,7 +78,7 @@ class OfferControllerTest {
     @Test
     void testCreateOffer_duplicated() throws Exception {
         OfferDto duplicateOffer = new OfferDto(
-                1L,  // duplicate offerId
+                1L,
                 1,
                 LocalDateTime.of(2023, 1, 1, 0, 0),
                 LocalDateTime.of(2023, 12, 31, 23, 59),
@@ -98,7 +98,7 @@ class OfferControllerTest {
     @Test
     void testCreateOffer_success() throws Exception {
         OfferDto validOffer = new OfferDto(
-                2L,  // valid offerId
+                2L,
                 2,
                 LocalDateTime.of(2024, 1, 1, 0, 0, 0),
                 LocalDateTime.of(2024, 12, 31, 23, 59, 0),
@@ -201,6 +201,102 @@ class OfferControllerTest {
                 .andExpect(jsonPath("$[1].priority").value(1))
                 .andExpect(jsonPath("$[1].price").value(150.0))
                 .andExpect(jsonPath("$[1].currencyIso").value("EUR"));
+    }
+
+    @Test
+    void testUpdateOffer_success() throws Exception {
+        OfferDto updatedOffer = new OfferDto(
+                1L,
+                2,
+                LocalDateTime.of(2023, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2023, 12, 31, 23, 59, 0),
+                2L,
+                "P1235",
+                2,
+                new BigDecimal("200.0"),
+                "EUR"
+        );
+
+        mockMvc.perform(put("/offers/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedOffer)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.offerId").value(updatedOffer.offerId()))
+                .andExpect(jsonPath("$.brandId").value(updatedOffer.brandId()))
+                .andExpect(jsonPath("$.startDate").value(updatedOffer.startDate().format(formatter)))
+                .andExpect(jsonPath("$.endDate").value(updatedOffer.endDate().format(formatter)))
+                .andExpect(jsonPath("$.priceListId").value(updatedOffer.priceListId()))
+                .andExpect(jsonPath("$.productPartnumber").value(updatedOffer.productPartnumber()))
+                .andExpect(jsonPath("$.priority").value(updatedOffer.priority()))
+                .andExpect(jsonPath("$.price").value(updatedOffer.price().doubleValue()))
+                .andExpect(jsonPath("$.currencyIso").value(updatedOffer.currencyIso()));
+    }
+
+    @Test
+    void testUpdateOffer_withMismatchedIds() throws Exception {
+        OfferDto updatedOffer = new OfferDto(
+                2L,  // mismatched offerId
+                2,
+                LocalDateTime.of(2023, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2023, 12, 31, 23, 59, 0),
+                2L,
+                "P1235",
+                2,
+                new BigDecimal("200.0"),
+                "EUR"
+        );
+
+        mockMvc.perform(put("/offers/1")  // path variable id is 1, but offerId in body is 2
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedOffer)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testUpdateOffer_withInvalidId() throws Exception {
+        OfferDto updatedOffer = new OfferDto(
+                999L,  // non-existent offerId
+                2,
+                LocalDateTime.of(2023, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2023, 12, 31, 23, 59, 0),
+                2L,
+                "P1235",
+                2,
+                new BigDecimal("200.0"),
+                "EUR"
+        );
+
+        mockMvc.perform(put("/offers/999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedOffer)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testDeleteOfferById_success() throws Exception {
+        mockMvc.perform(delete("/offers/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        List<OfferDto> offers = jdbcTemplate.query("SELECT * FROM Offer WHERE OFFER_ID = ?", new Object[]{1L}, (rs, rowNum) -> new OfferDto(
+                rs.getLong("OFFER_ID"),
+                rs.getInt("BRAND_ID"),
+                rs.getTimestamp("START_DATE").toLocalDateTime(),
+                rs.getTimestamp("END_DATE").toLocalDateTime(),
+                rs.getLong("PRICE_LIST"),
+                rs.getString("PARTNUMBER"),
+                rs.getInt("PRIORITY"),
+                rs.getBigDecimal("PRICE"),
+                rs.getString("CURR")
+        ));
+        assertEquals(0, offers.size());
+    }
+
+    @Test
+    void testDeleteOfferById_nonExistent() throws Exception {
+        mockMvc.perform(delete("/offers/999")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
 }

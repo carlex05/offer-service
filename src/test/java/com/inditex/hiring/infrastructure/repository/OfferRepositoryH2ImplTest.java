@@ -158,5 +158,27 @@ class OfferRepositoryH2ImplTest {
         assertEquals("EUR", updatedOffer.currencyIso());
     }
 
+    @Test
+    void testDeleteOfferById_success() {
+        offerRepository.deleteOfferById(1L);
+
+        List<Offer> offers = jdbcTemplate.query("SELECT * FROM Offer WHERE OFFER_ID = ?", new Object[]{1L}, (rs, rowNum) -> new Offer(
+                rs.getLong("OFFER_ID"),
+                rs.getInt("BRAND_ID"),
+                rs.getTimestamp("START_DATE").toLocalDateTime(),
+                rs.getTimestamp("END_DATE").toLocalDateTime(),
+                rs.getLong("PRICE_LIST"),
+                rs.getString("PARTNUMBER"),
+                rs.getInt("PRIORITY"),
+                rs.getBigDecimal("PRICE"),
+                rs.getString("CURR")
+        ));
+        assertEquals(0, offers.size());
+    }
+
+    @Test
+    void testDeleteOfferById_nonExistent() {
+        assertThrows(NoSuchResourceFoundException.class, () -> offerRepository.deleteOfferById(999L));
+    }
 
 }
