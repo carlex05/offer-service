@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -41,6 +42,21 @@ public class OfferRepositoryH2Impl implements OfferRepository {
 
     @Override
     public Optional<Offer> findById(long id) {
-        return Optional.empty();
+        List<Offer> offers = jdbcTemplate.query(
+                "SELECT * FROM Offer WHERE OFFER_ID = ?",
+                new Object[]{id},
+                (rs, rowNum) -> new Offer(
+                        rs.getLong("OFFER_ID"),
+                        rs.getInt("BRAND_ID"),
+                        rs.getTimestamp("START_DATE").toLocalDateTime(),
+                        rs.getTimestamp("END_DATE").toLocalDateTime(),
+                        rs.getLong("PRICE_LIST"),
+                        rs.getString("PARTNUMBER"),
+                        rs.getInt("PRIORITY"),
+                        rs.getBigDecimal("PRICE"),
+                        rs.getString("CURR")
+                )
+        );
+        return offers.stream().findFirst();
     }
 }

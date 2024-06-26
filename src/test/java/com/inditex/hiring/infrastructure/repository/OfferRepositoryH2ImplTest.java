@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,5 +78,20 @@ class OfferRepositoryH2ImplTest {
                 rs.getString("CURR")
         ));
         assertEquals(2, offers.size());
+    }
+
+    @Test
+    void testFindById_withValidId() {
+        Optional<Offer> offer = offerRepository.findById(1L);
+
+        assertTrue(offer.isPresent());
+        assertEquals(1L, offer.get().offerId());
+    }
+
+    @Test
+    void testFindById_withInvalidId() {
+        Optional<Offer> offer = offerRepository.findById(999L);
+
+        assertFalse(offer.isPresent());
     }
 }
