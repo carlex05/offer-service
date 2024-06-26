@@ -3,7 +3,9 @@ package com.inditex.hiring.domain.service;
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.domain.port.OfferRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @AllArgsConstructor
 public class OfferService {
 

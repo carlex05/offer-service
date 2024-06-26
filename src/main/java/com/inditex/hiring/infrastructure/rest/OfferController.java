@@ -1,9 +1,14 @@
 package com.inditex.hiring.infrastructure.rest;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import com.inditex.hiring.domain.exception.DuplicateOfferIdException;
+import com.inditex.hiring.domain.model.Offer;
+import com.inditex.hiring.domain.service.OfferService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +16,16 @@ import org.springframework.web.bind.annotation.*;
 import com.inditex.hiring.infrastructure.rest.dto.OfferDto;
 
 
-//import javax.validation.Valid;
-
-
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "/offers")
 public class OfferController {
 
-	
-	
+	private final OfferService offerService;
 
 	@PostMapping
-	public ResponseEntity<OfferDto> createOffer(@RequestBody @Valid OfferDto offerdto){
-		return null;
+	public ResponseEntity<OfferDto> createOffer(@RequestBody @Valid OfferDto offerDto){
+		throw new DuplicateOfferIdException("");
 	}
 
 	//Borrar por id
