@@ -59,4 +59,9 @@ public class OfferRepositoryH2Impl implements OfferRepository {
         );
         return offers.stream().findFirst();
     }
+
+    @Override
+    public List<Offer> findAll() {
+        return List.of();
+    }
 }

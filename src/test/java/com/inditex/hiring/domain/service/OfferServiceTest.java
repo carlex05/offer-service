@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -68,6 +69,21 @@ class OfferServiceTest {
         var notFoundOffer = offerService.getOfferById(1000L);
         assertTrue(notFoundOffer.isEmpty());
         verify(repository, times(1)).findById(1000L);
+    }
+
+    @Test
+    void getAllOffers() {
+        var offer1 = createOffer();
+        var offer2 = createOffer();
+        when(repository.findAll()).thenReturn(List.of(offer1, offer2));
+
+        OfferService offerService = new OfferService(repository);
+        var offers = offerService.getAllOffers();
+
+        assertEquals(2, offers.size());
+        assertEquals(offer1, offers.get(0));
+        assertEquals(offer2, offers.get(1));
+        verify(repository, times(1)).findAll();
     }
 
 }
