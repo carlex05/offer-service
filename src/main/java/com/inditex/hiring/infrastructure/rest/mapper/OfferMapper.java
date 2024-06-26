@@ -1,4 +1,4 @@
-package com.inditex.hiring.infrastructure.rest;
+package com.inditex.hiring.infrastructure.rest.mapper;
 
 import com.inditex.hiring.domain.model.Offer;
 import com.inditex.hiring.infrastructure.rest.dto.OfferDto;
