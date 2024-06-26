@@ -7,6 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class OfferRepositoryH2Impl implements OfferRepository {
 
@@ -35,5 +37,10 @@ public class OfferRepositoryH2Impl implements OfferRepository {
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateOfferIdException("An offer with ID " + offer.offerId() + " already exists.");
         }
+    }
+
+    @Override
+    public Optional<Offer> findById(long id) {
+        return Optional.empty();
     }
 }

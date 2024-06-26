@@ -16,4 +16,9 @@ public class OfferService {
             throw new IllegalArgumentException("An offer is required");
         repository.createOffer(offer);
     }
+
+    public Offer getOfferById(long id){
+        return repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Offer not found with id: " + id));
+    }
 }

@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,4 +46,28 @@ class OfferServiceTest {
                 BigDecimal.TEN,
                 "ES");
     }
+
+    @Test
+    void getOfferById_withValidId() {
+        var offer = createOffer();
+        when(repository.findById(1000L)).thenReturn(Optional.of(offer));
+
+        OfferService offerService = new OfferService(repository);
+        Offer foundOffer = offerService.getOfferById(1000L);
+
+        assertNotNull(foundOffer);
+        assertEquals(1000L, foundOffer.offerId());
+        verify(repository, times(1)).findById(1000L);
+    }
+
+    @Test
+    void getOfferById_withInvalidId() {
+        when(repository.findById(1000L)).thenReturn(Optional.empty());
+
+        OfferService offerService = new OfferService(repository);
+
+        assertThrows(IllegalArgumentException.class, () -> offerService.getOfferById(1000L));
+        verify(repository, times(1)).findById(1000L);
+    }
+
 }
