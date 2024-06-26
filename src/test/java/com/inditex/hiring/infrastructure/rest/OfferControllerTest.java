@@ -76,4 +76,33 @@ class OfferControllerTest {
                 .andExpect(status().isConflict());
     }
 
+    @Test
+    void testCreateOffer_success() throws Exception {
+        OfferDto validOffer = new OfferDto(
+                2L,  // valid offerId
+                2,
+                LocalDateTime.of(2024, 1, 1, 0, 0),
+                LocalDateTime.of(2024, 12, 31, 23, 59),
+                2L,
+                "P1235",
+                1,
+                new BigDecimal("150.0"),
+                "EUR"
+        );
+
+        mockMvc.perform(post("/offers")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(validOffer)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.offerId").value(validOffer.offerId()))
+                .andExpect(jsonPath("$.brandId").value(validOffer.brandId()))
+                .andExpect(jsonPath("$.startDate").value(validOffer.startDate().toString()))
+                .andExpect(jsonPath("$.endDate").value(validOffer.endDate().toString()))
+                .andExpect(jsonPath("$.priceListId").value(validOffer.priceListId()))
+                .andExpect(jsonPath("$.productPartnumber").value(validOffer.productPartnumber()))
+                .andExpect(jsonPath("$.priority").value(validOffer.priority()))
+                .andExpect(jsonPath("$.price").value(validOffer.price()))
+                .andExpect(jsonPath("$.currencyIso").value(validOffer.currencyIso()));
+    }
+
 }

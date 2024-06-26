@@ -25,7 +25,10 @@ public class OfferController {
 
 	@PostMapping
 	public ResponseEntity<OfferDto> createOffer(@RequestBody @Valid OfferDto offerDto){
-		throw new DuplicateOfferIdException("");
+		Offer offer = OfferMapper.toDomain(offerDto);
+		offerService.createOffer(offer);
+		return ResponseEntity.created(URI.create("/offers/" + offerDto.offerId()))
+				.body(offerDto);
 	}
 
 	//Borrar por id
