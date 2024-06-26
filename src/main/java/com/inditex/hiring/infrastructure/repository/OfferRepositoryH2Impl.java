@@ -60,6 +60,17 @@ public class OfferRepositoryH2Impl implements OfferRepository {
 
     @Override
     public void updateOffer(Offer offer) {
-
+        jdbcTemplate.update(
+                "UPDATE Offer SET BRAND_ID = ?, START_DATE = ?, END_DATE = ?, PRICE_LIST = ?, PARTNUMBER = ?, PRIORITY = ?, PRICE = ?, CURR = ? WHERE OFFER_ID = ?",
+                offer.brandId(),
+                offer.startDate(),
+                offer.endDate(),
+                offer.priceListId(),
+                offer.productPartnumber(),
+                offer.priority(),
+                offer.price(),
+                offer.currencyIso(),
+                offer.offerId()
+        );
     }
 }
